@@ -29,7 +29,7 @@ def main():
         reburse_rate_1 = cols[0].text_input("既往症患者赔付比例", value=50)
         reburse_rate_2 = cols[1].text_input("无既往症患者赔付比例", value=50)
     else:
-        reburse_rate_2 = st.text_input("赔付比例", value=80)
+        reburse_rate_2 = st.text_input("赔付比例", value=80, help='0-100')
         reburse_rate_1 = 0
 
     add = st.button('增加药品')
