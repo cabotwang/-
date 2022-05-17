@@ -1,8 +1,8 @@
 import pandas as pd
 import streamlit as st
 
-drug_utl = pd.read_excel('./base_data/incidence_rate.xlsx', usecols=['商品名', '适应症', '治疗评级', '使用率'])
-drug_cost = pd.read_excel('./base_data/drug_cost_peryear.xlsx', usecols=['商品名', '通用名', '适应症', '人均费用'])
+drug_utl = pd.read_excel('incidence_rate.xlsx', usecols=['商品名', '适应症', '治疗评级', '使用率'])
+drug_cost = pd.read_excel('drug_cost_peryear.xlsx', usecols=['商品名', '通用名', '适应症', '人均费用'])
 drug_list = []
 
 
