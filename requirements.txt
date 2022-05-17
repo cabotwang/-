@@ -7,5 +7,3 @@ numpy==1.20.3
 streamlit==0.81.0
 joblib==1.0.1
 Pillow==8.2.0
-scikit_learn==0.24.2
-xlrd == 1.0.0
