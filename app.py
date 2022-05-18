@@ -5,12 +5,12 @@ st.set_page_config(layout="wide")
 
 @st.cache
 def data_read():
-    drug_utl = pd.read_csv('incidence_rate.csv', usecols=['商品名', '适应症', '治疗评级', '使用率'])
-    drug_cost = pd.read_csv('drug_cost_peryear.csv', usecols=['商品名', '通用名', '适应症', '人均费用'])
-    full_data = pd.read_csv('full_data.csv', usecols=['唯一识别号', '地区', '适应症', '商品名', '通用名',
+    drug_utl = pd.read_csv('./base_data/incidence_rate.csv', usecols=['商品名', '适应症', '治疗评级', '使用率'])
+    drug_cost = pd.read_csv('./base_data/drug_cost_peryear.csv', usecols=['商品名', '通用名', '适应症', '人均费用'])
+    full_data = pd.read_csv('./base_data/full_data.csv', usecols=['唯一识别号', '地区', '适应症', '商品名', '通用名',
                                                                   '人次数',	'药品总金额',	'本次赔付金额', '既往症人数',
                                                                   '1万判定',	'1.5万判定',	'2万判定'])
-    region_info = pd.read_csv('region_info.csv', usecols=['地区', '总参保人数', '非既往症', '既往症', '免赔额'])
+    region_info = pd.read_csv('./base_data/region_info.csv', usecols=['地区', '总参保人数', '非既往症', '既往症', '免赔额'])
     return drug_utl, drug_cost, full_data, region_info
 
 drug_utl, drug_cost, full_data, region_info = data_read()
@@ -49,6 +49,7 @@ with c1:
     else:
         reburse_rate_2 = st.text_input("赔付比例", value=80)
         reburse_rate_1 = 0
+    st.markdown("")
     add = st.button('增加药品')
     st.markdown("")
 
@@ -62,27 +63,34 @@ with c1:
     def get_data():
         return []
 
+    @st.cache(allow_output_mutation=True)
+    def get_df():
+        return pd.DataFrame([], columns=['商品名', '通用名', '适应症', '治疗评级', '成本'])
+
     if add:
-        get_data().append({'商品名': drug_name,'适应症': indication})
-        df = pd.DataFrame(get_data())
-        #
-        df = pd.merge(df, drug_cost, on=['商品名', '适应症'], how='left')
-        df = pd.merge(df, drug_utl, on=['商品名', '适应症'], how='left')
-        df['赔付金额'] = df['人均费用'].apply(lambda x: reburse_amount(x, deduction, reburse_rate_1, reburse_rate_2, pmh_rate))
-        df['成本'] = df['使用率'] * df['赔付金额']
-        # df['使用率(1/10万)'] = df['使用率'].apply(lambda x: '%.2f' % (x*100000))
-        # df['成本'] = df['成本'].apply(lambda x: '%.2f' % x)
-        df = df[['商品名', '通用名', '适应症', '治疗评级', '成本']]
-        df = df.drop_duplicates(subset=['商品名', '适应症'])
-        df = df.set_index('商品名')
+        if {'商品名': drug_name,'适应症': indication} not in get_data():
+            get_data().append({'商品名': drug_name,'适应症': indication})
+        df1 = pd.DataFrame(get_data())
+        df1 = pd.merge(df1, drug_cost, on=['商品名', '适应症'], how='left')
+        df1 = pd.merge(df1, drug_utl, on=['商品名', '适应症'], how='left')
+        df1['赔付金额'] = df1['人均费用'].apply(lambda x: reburse_amount(x, deduction, reburse_rate_1, reburse_rate_2, pmh_rate))
+        df1['成本'] = df1['使用率'] * df1['赔付金额']
+        df1 = df1[['商品名', '通用名', '适应症', '治疗评级', '成本']]
+        df1 = df1.drop_duplicates(subset=['商品名', '适应症'])
+        df = df1.set_index('商品名')
     with c2:
+        try:
+            st.write('已选择药品：', ' , '.join([':'.join([each['商品名'], each['适应症']]) for each in get_data()]))
+        except TypeError:
+            st.write('已选择药品： 无')
         st.write('药品成本为：%.2f' % df['成本'].sum())
         st.table(df)
         clear = st.button('清除列表')
 
         if clear:
-            st.experimental_memo.clear()
+            get_data().clear()
 
+st.markdown("")
 with st.expander("ℹ️ - 详细说明"):
     df1 = pd.merge(df, full_data, on=['商品名', '适应症'], how='inner')
     gdata = df1.groupby(['商品名', '地区', '适应症']).agg(
