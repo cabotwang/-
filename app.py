@@ -1,21 +1,16 @@
 import pandas as pd
 import streamlit as st
 
-# def data_read():
-#     drug_utl = pd.read_csv('./base_data/incidence_rate.csv', usecols=['商品名', '适应症', '治疗评级', '使用率'])
-#     # drug_utl = pd.read_excel('./base_data/incidence_rate.xlsx', usecols=['商品名', '适应症', '治疗评级', '使用率'])
-#     drug_cost = pd.read_csv('./base_data/drug_cost_peryear.csv', usecols=['商品名', '通用名', '适应症', '人均费用'])
-#     # drug_cost.to_csv('./base_data/drug_cost_peryear.csv', index=False)
 
 def main():
     @st.cache
     def data_read():
-        drug_utl = pd.read_csv('./base_data/incidence_rate.csv', usecols=['商品名', '适应症', '治疗评级', '使用率'])
-        drug_cost = pd.read_csv('./base_data/drug_cost_peryear.csv', usecols=['商品名', '通用名', '适应症', '人均费用'])
-        full_data = pd.read_csv('./base_data/full_data.csv', usecols=['唯一识别号', '地区', '适应症', '商品名', '通用名',
+        drug_utl = pd.read_csv('incidence_rate.csv', usecols=['商品名', '适应症', '治疗评级', '使用率'])
+        drug_cost = pd.read_csv('drug_cost_peryear.csv', usecols=['商品名', '通用名', '适应症', '人均费用'])
+        full_data = pd.read_csv('full_data.csv', usecols=['唯一识别号', '地区', '适应症', '商品名', '通用名',
                                                                       '人次数',	'药品总金额',	'本次赔付金额', '既往症人数',
                                                                       '1万判定',	'1.5万判定',	'2万判定'])
-        region_info = pd.read_csv('./base_data/region_info.csv', usecols=['地区', '总参保人数', '非既往症', '既往症', '免赔额'])
+        region_info = pd.read_csv('region_info.csv', usecols=['地区', '总参保人数', '非既往症', '既往症', '免赔额'])
         return drug_utl, drug_cost, full_data, region_info
 
     drug_utl, drug_cost, full_data, region_info = data_read()
