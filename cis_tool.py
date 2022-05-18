@@ -96,6 +96,8 @@ class cistoolApp(HydraHeadApp):
 
                 if add:
                     if uploader_measure == '单个药品':
+                        if {'商品名': drug_name,'适应症': indication} not in get_data():
+                            get_data().append({'商品名': drug_name,'适应症': indication})
                         df1 = pd.DataFrame(get_data())
                     else:
                         df1 = data[['商品名', '适应症']]
