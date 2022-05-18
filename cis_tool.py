@@ -17,7 +17,7 @@ class cistoolApp(HydraHeadApp):
             full_data = pd.read_csv('full_data.csv', usecols=['唯一识别号', '地区', '适应症', '商品名', '通用名',
                                                                           '人次数', '药品总金额', '本次赔付金额', '既往症人数',
                                                                           '1万判定', '1.5万判定', '2万判定'])
-            region_info = pd.read_csv('./base_data/region_info.csv', usecols=['地区', '总参保人数', '非既往症', '既往症', '免赔额'])
+            region_info = pd.read_csv('region_info.csv', usecols=['地区', '总参保人数', '非既往症', '既往症', '免赔额'])
             return drug_utl, drug_cost, full_data, region_info
 
         drug_utl, drug_cost, full_data, region_info = data_read()
