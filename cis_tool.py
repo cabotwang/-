@@ -21,20 +21,20 @@ class cistoolApp(HydraHeadApp):
         df = pd.DataFrame([], columns=['商品名', '通用名', '适应症', '治疗评级', '成本'])
         # st.header('惠民保药品测算工具')
 
-        def _max_width_():
-            max_width_str = f"max-width: 1900px;"
-            st.markdown(
-                f"""
-            <style>
-            .reportview-container.main.block-container{{
-                {max_width_str}
-            }}
-            </style>    
-            """,
-                unsafe_allow_html=True,
-            )
-
-        _max_width_()
+        # def _max_width_():
+        #     max_width_str = f"max-width: 1900px;"
+        #     st.markdown(
+        #         f"""
+        #     <style>
+        #     .reportview-container.main.block-container{{
+        #         {max_width_str}
+        #     }}
+        #     </style>
+        #     """,
+        #         unsafe_allow_html=True,
+        #     )
+        #
+        # _max_width_()
 
         with st.container():
             ce, c1, ce_1, c2, ce_2 = st.columns([0.07, 1.5, 0.07, 5, 0.07])
@@ -51,25 +51,11 @@ class cistoolApp(HydraHeadApp):
                     indication = st.selectbox("适应症:", ind_list)
                 else:
                     druglist = st.file_uploader('上传药品清单',
-                                                help='请上传excel文档，需要包含药品商品名和适应症。\r表头名需为\'商品名\'和\'适应症\'', type=['xlsx'])
+                                                help='请上传excel文档，需要包含药品商品名和适应症。对应表头名需为\'商品名\'和\'适应症\'', type=['xlsx'])
                     if druglist is not None:
                         data = pd.read_excel(druglist)
                 deduction = st.text_input("免赔额:", value=0)
                 par_rate = st.slider("参保率:", 0, 100, 40)
-
-                # ColorMinMax = st.markdown(''' <style> div.stSlider > div[data-baseweb = "slider"] > div[data-testid="stTickBar"] > div {
-                #     background: rgb(1 1 1 / 0%); } </style>''', unsafe_allow_html=True)
-                # Slider_Cursor = st.markdown(''' <style> div.stSlider > div[data-baseweb="slider"] > div > div > div[role="slider"]{
-                #     background-color: rgb(3, 90, 173); box-shadow: rgb(3, 90, 173 / 20%) 0px 0px 0px 0.2rem;} </style>''',
-                #                             unsafe_allow_html=True)
-                # Slider_Number = st.markdown(''' <style> div.stSlider > div[data-baseweb="slider"] > div > div > div > div
-                #                                 { color: rgb(14, 38, 74); } </style>''', unsafe_allow_html=True)
-                # col = f''' <style> div.stSlider > div[data-baseweb = "slider"] > div > div {{
-                #     background: linear-gradient(to right, rgb(3, 90, 173) 0%,
-                #                                 rgb(3, 90, 173) {par_rate}%,
-                #                                 rgba(151, 166, 195, 0.25) {par_rate}%,
-                #                                 rgba(151, 166, 195, 0.25) 100%); }} </style>'''
-                # ColorSlider = st.markdown(col, unsafe_allow_html=True)
 
                 PMH = st.checkbox('是否包含既往症患者')
                 pmh_rate = -0.0096 * par_rate + 0.9457
