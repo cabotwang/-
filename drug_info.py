@@ -3,8 +3,8 @@ import pandas as pd
 from hydralit import HydraHeadApp
 
 
-data = pd.read_excel('./base_data/drug_cag.xlsx', usecols=['一级目录', '二级目录', '三级目录', '化学名'])
-data.to_csv('./base_data/drug_cag.csv', index=False, encoding='utf-8_sig')
+# data = pd.read_excel('./base_data/drug_cag.xlsx', usecols=['一级目录', '二级目录', '三级目录', '化学名'])
+# data.to_csv('./base_data/drug_cag.csv', index=False, encoding='utf-8_sig')
 
 class druginfoApp(HydraHeadApp):
 
