@@ -1,9 +1,6 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
 from hydralit import HydraHeadApp
-
-st.set_page_config(layout="wide")
 
 # create a wrapper class
 class cistoolApp(HydraHeadApp):
@@ -12,17 +9,17 @@ class cistoolApp(HydraHeadApp):
 
         @st.cache
         def data_read():
-            drug_utl = pd.read_csv('incidence_rate.csv', usecols=['商品名', '适应症', '治疗评级', '使用率'])
-            drug_cost = pd.read_csv('drug_cost_peryear.csv', usecols=['商品名', '通用名', '适应症', '人均费用'])
-            full_data = pd.read_csv('full_data.csv', usecols=['唯一识别号', '地区', '适应症', '商品名', '通用名',
+            drug_utl = pd.read_csv('./base_data/incidence_rate.csv', usecols=['商品名', '适应症', '治疗评级', '使用率'])
+            drug_cost = pd.read_csv('./base_data/drug_cost_peryear.csv', usecols=['商品名', '通用名', '适应症', '人均费用'])
+            full_data = pd.read_csv('./base_data/full_data.csv', usecols=['唯一识别号', '地区', '适应症', '商品名', '通用名',
                                                                           '人次数', '药品总金额', '本次赔付金额', '既往症人数',
                                                                           '1万判定', '1.5万判定', '2万判定'])
-            region_info = pd.read_csv('region_info.csv', usecols=['地区', '总参保人数', '非既往症', '既往症', '免赔额'])
+            region_info = pd.read_csv('./base_data/region_info.csv', usecols=['地区', '参保率', '总参保人数', '非既往症', '既往症', '免赔额'])
             return drug_utl, drug_cost, full_data, region_info
 
         drug_utl, drug_cost, full_data, region_info = data_read()
         df = pd.DataFrame([], columns=['商品名', '通用名', '适应症', '治疗评级', '成本'])
-        st.header('惠民保药品测算工具')
+        # st.header('惠民保药品测算工具')
 
         def _max_width_():
             max_width_str = f"max-width: 1900px;"
@@ -96,8 +93,8 @@ class cistoolApp(HydraHeadApp):
 
                 if add:
                     if uploader_measure == '单个药品':
-                        if {'商品名': drug_name,'适应症': indication} not in get_data():
-                            get_data().append({'商品名': drug_name,'适应症': indication})
+                        if {'商品名': drug_name, '适应症': indication} not in get_data():
+                            get_data().append({'商品名': drug_name, '适应症': indication})
                         df1 = pd.DataFrame(get_data())
                     else:
                         df1 = data[['商品名', '适应症']]
@@ -132,7 +129,8 @@ class cistoolApp(HydraHeadApp):
             gdata['非既往症'] = gdata['非既往症'].apply(lambda x: format(x, '.0%'))
             gdata['人均自费'] = (gdata['总理赔金额'] / gdata['人头数']).apply(lambda x: int(x))
             gdata['既往症'] = gdata['既往症'].apply(lambda x: format(x, '.0%'))
-            gdata = gdata[['商品名', '适应症', '地区', '使用率(1/10万)', '人均自费', '成本', '免赔额', '非既往症', '既往症']]
+            gdata['参保率'] = gdata['参保率'].apply(lambda x: format(x, '.0%'))
+            gdata = gdata[['商品名', '适应症', '地区', '参保率', '使用率(1/10万)', '人均自费', '成本', '免赔额', '非既往症', '既往症']]
             gdata = gdata.set_index('商品名')
             st.table(gdata)
 
