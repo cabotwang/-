@@ -98,6 +98,7 @@ class cistoolApp(HydraHeadApp):
                         df1 = pd.DataFrame(get_data())
                     else:
                         df1 = data[['商品名', '适应症']]
+                        st.write(df1)
                     df1 = pd.merge(df1, drug_cost, on=['商品名', '适应症'], how='left')
                     df1 = pd.merge(df1, drug_utl, on=['商品名', '适应症'], how='left')
                     df1['赔付金额'] = df1['人均费用'].apply(
