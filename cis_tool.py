@@ -54,7 +54,7 @@ class cistoolApp(HydraHeadApp):
                     if druglist is not None:
                         data = pd.read_excel(druglist)
                     st.write('请选择对应的数据列')
-                    st.write(data.columns)
+                    st.write(data[['商品名', '适应症']])
                 deduction = st.text_input("免赔额:", value=0)
                 par_rate = st.slider("参保率:", 0, 100, 40)
 
@@ -99,7 +99,6 @@ class cistoolApp(HydraHeadApp):
                         df1 = pd.DataFrame(get_data())
                     else:
                         df1 = data[['商品名', '适应症']]
-                        st.write(df1)
                     df1 = pd.merge(df1, drug_cost, on=['商品名', '适应症'], how='left')
                     df1 = pd.merge(df1, drug_utl, on=['商品名', '适应症'], how='left')
                     df1['赔付金额'] = df1['人均费用'].apply(
