@@ -50,11 +50,10 @@ class cistoolApp(HydraHeadApp):
                     ind_list = drug_cost[drug_cost['商品名'] == drug_name]['适应症'].tolist()
                     indication = st.selectbox("适应症:", ind_list)
                 else:
-                    druglist = st.file_uploader('上传药品清单', help='请上传excel文档', type=['xlsx'])
+                    druglist = st.file_uploader('上传药品清单',
+                                                help='请上传excel文档，需要包含药品商品名和适应症。\r表头名需为\'商品名\'和\'适应症\'', type=['xlsx'])
                     if druglist is not None:
                         data = pd.read_excel(druglist)
-                    st.write('请选择对应的数据列')
-                    st.write(data[['商品名', '适应症']])
                 deduction = st.text_input("免赔额:", value=0)
                 par_rate = st.slider("参保率:", 0, 100, 40)
 
