@@ -19,22 +19,6 @@ class cistoolApp(HydraHeadApp):
 
         drug_utl, drug_cost, full_data, region_info = data_read()
         df = pd.DataFrame([], columns=['商品名', '通用名', '适应症', '治疗评级', '成本'])
-        # st.header('惠民保药品测算工具')
-
-        # def _max_width_():
-        #     max_width_str = f"max-width: 1900px;"
-        #     st.markdown(
-        #         f"""
-        #     <style>
-        #     .reportview-container.main.block-container{{
-        #         {max_width_str}
-        #     }}
-        #     </style>
-        #     """,
-        #         unsafe_allow_html=True,
-        #     )
-        #
-        # _max_width_()
 
         with st.container():
             ce, c1, ce_1, c2, ce_2 = st.columns([0.07, 1.5, 0.07, 5, 0.07])
