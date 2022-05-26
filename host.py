@@ -2,6 +2,7 @@ from hydralit import HydraApp
 import streamlit as st
 from drug_info import druginfoApp
 from cis_tool import cistoolApp
+from model_explain import modelexplainApp
 
 st.set_page_config(layout="wide")
 if __name__ == '__main__':
@@ -11,6 +12,7 @@ if __name__ == '__main__':
     # add all your application classes here
     app.add_app("测算工具", icon="⌨", app=cistoolApp())
     app.add_app("药品知识库", icon="📚", app=druginfoApp())
+    app.add_app("模型介绍", icon="💬", app=modelexplainApp())
 
     # run the whole lot
     app.run()
